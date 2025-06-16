@@ -1,25 +1,31 @@
-from flask import Flask, request, render_template_string
+from flask import Flask, request, render_template_string, url_for
 from collections import Counter
 import re
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 
 # HTML template for the upload form
 HTML_TEMPLATE = '''
 <!DOCTYPE html>
 <html>
+<head>
+    <title>Log File Brute Force Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
 <body>
     <h2>Log File Brute Force Analyzer</h2>
     <form method="post" enctype="multipart/form-data">
         <p>Upload .txt file:</p>
-        <input type="file" name="file" accept=".txt"><br><br>
+        <input type="file" name="file" accept=".txt">
         <p>Or paste log content:</p>
-        <textarea name="log_content" rows="10" cols="50"></textarea><br><br>
+        <textarea name="log_content" rows="10" cols="50"></textarea>
         <input type="submit" value="Analyze">
     </form>
     {% if results %}
-    <h3>Analysis Results:</h3>
-    <pre>{{ results }}</pre>
+    <div class="results">
+        <h3>Analysis Results:</h3>
+        <pre>{{ results }}</pre>
+    </div>
     {% endif %}
 </body>
 </html>
