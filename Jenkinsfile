@@ -16,7 +16,8 @@ pipeline {
         }
         stage('Security Test with ZAP') {
             steps {
-                // If ZAP is a shell command, use bat as well, or keep as is if it's a Jenkins plugin step
+                // Run a ZAP scan and generate the zap-report.html file.
+                bat 'docker run --rm -v %cd%:/zap/wrk:rw -t owasp/zap2docker-stable zap-baseline.py -t http://host.docker.internal:5000 -r zap-report.html'
                 echo 'ZAP Security Scan Completed'
             }
         }
