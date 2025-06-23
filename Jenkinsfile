@@ -16,9 +16,11 @@ pipeline {
         }
         stage('Security Test with ZAP') {
             steps {
-                // Run a ZAP scan and generate the zap-report.html file.
-                bat 'docker run --rm -v %cd%:/zap/wrk:rw -t owasp/zap2docker-stable zap-baseline.py -t http://host.docker.internal:5000 -r zap-report.html'
+                // Run a ZAP scan and generate the zap-report.html file using an absolute path for the Windows machine
+                bat 'docker run --rm -v C:/ProgramData/Jenkins/.jenkins/workspace/devsecops-pipeline:/zap/wrk:rw -t owasp/zap2docker-stable zap-baseline.py -t http://host.docker.internal:5000 -r zap-report.html'
                 echo 'ZAP Security Scan Completed'
+                // Archive zap-report.html as a build artifact, making it easily accessible from the Jenkins build page
+                archiveArtifacts artifacts: 'zap-report.html', onlyIfSuccessful: true
             }
         }
         stage('Deploy Application') {
