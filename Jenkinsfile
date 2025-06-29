@@ -2,6 +2,9 @@
 // that clones a repository, builds a Docker image, runs a security test using ZAP,
 // and deploys the application.
 pipeline {
+    environment {
+        SECRET_KEY = credentials('flask-secret-key')
+    }
     agent any
     stages {
         stage('Clone Repo') {

@@ -7,8 +7,8 @@ import re
 import os
 
 app = Flask(__name__, static_url_path='/static')
- # Trying using secret key,so attackers don't forge session cookies or CSRF tokens.
-app.secret_key = os.environ.get('SECRET_KEY', 'change_this_secret_key')
+# Use secret key from Jenkins environment variable; fail if not set for security
+app.secret_key = os.environ['flask-secret-key']
 csrf = CSRFProtect(app)
 
 # HTML template for the upload form
